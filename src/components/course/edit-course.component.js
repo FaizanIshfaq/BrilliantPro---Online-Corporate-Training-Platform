@@ -1,84 +1,219 @@
-import React, { Component } from "react";
+import React,{ Component } from "react";
 import axios from 'axios';
 
-export default class CreateCourse extends Component {
+export default class CreateCourse extends Component
+{
 
-  constructor(props) {
+  constructor(props)
+  {
     super(props)
 
     // Setting up functions
     this.onChangeCourseName = this.onChangeCourseName.bind(this);
     this.onChangeCourseCode = this.onChangeCourseCode.bind(this);
     this.onChangeCourseCredit = this.onChangeCourseCredit.bind(this);
+    // bindAdd Student
+    this.onAddStudent = this.onAddStudent.bind(this);
+    this.onRemoveStudent = this.onRemoveStudent.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+
+    // get id from url
+    const segemnts = window.location.href.split('/');
+    const courseId = segemnts[segemnts.length - 1];
 
     // Setting up state
     this.state = {
       name: '',
-      code: '',
-      credit: ''
+      description: '',
+      instructor: '',
+      _id: courseId,
+      studentList: [],
+      allStudentList: [],
     }
   }
+  loadAllStudente()
+  {
+    axios.get('http://localhost:4000/students/')
+      .then(res =>
+      {
+        console.log("All Students",res)
+        this.setState({ allStudentList: res.data });
+      })
+      .catch((error) =>
+      {
+        console.log(error);
+      })
+  }
+  loadCourseData()
+  {
+    axios.get('http://localhost:4000/courses/edit-course/' + this.state._id)
+      .then(res =>
+      {
+        console.log("res",res)
 
-  onChangeCourseName(e) {
+        this.setState({
+          name: res.data.name,
+          description: res.data.description,
+          instructor: res.data.instructor,
+          studentList: res.data.students
+        });
+      })
+      .catch((error) =>
+      {
+        console.log(error);
+      })
+  }
+  componentDidMount()
+  {
+    this.loadCourseData();
+    this.loadAllStudente();
+
+  }
+  onAddStudent(event)
+  {
+    console.log("event Value",event.target.value);
+    const student = this.state.allStudentList.filter((res) => res._id === event.target.value)[0];
+    console.log("student",student);
+    // set state 
+    this.setState({
+      studentList: [...this.state.studentList,student]
+    });
+    // remove the same element from allStudentList
+    const allStudentList = this.state.allStudentList.filter((res) => res._id !== event.target.value);
+    this.setState({ allStudentList: allStudentList });
+  }
+  onRemoveStudent(event)
+  {
+    console.log("event Value",event.target.value);
+
+    // Find the student to remove from studentList
+    const studentToRemove = this.state.studentList.filter((res) => res._id === event.target.value)[0];
+
+    // Remove the student from studentList and update state
+    const updatedStudentList = this.state.studentList.filter((res) => res._id !== event.target.value);
+    this.setState({ studentList: updatedStudentList });
+
+    // Add the student back to allStudentList and update state
+    const updatedAllStudentList = [...this.state.allStudentList,studentToRemove];
+    this.setState({ allStudentList: updatedAllStudentList });
+  }
+  onChangeCourseName(e)
+  {
     this.setState({ name: e.target.value })
   }
 
-  onChangeCourseCode(e) {
+  onChangeCourseCode(e)
+  {
     this.setState({ code: e.target.value })
   }
 
-  onChangeCourseCredit(e) {
+  onChangeCourseCredit(e)
+  {
     this.setState({ credit: e.target.value })
   }
 
-  onSubmit(e) {
+  onSubmit(e)
+  {
     e.preventDefault()
 
     const courseObject = {
       name: this.state.name,
-      code: this.state.code,
-      credit: this.state.credit
+      description: this.state.description,
+      instructor: this.state.instructor
     };
-    axios.post('http://localhost:4000/courses/create-course', courseObject)
+    axios.post('http://localhost:4000/courses/create-course',courseObject)
       .then(res => console.log(res.data));
 
-    this.setState({ name: '', code: '', credit: '' })
+    this.setState({ name: '',code: '',credit: '' })
   }
 
-  render() {
+  render()
+  {
     return (
       <div>
         <h3>Create New Course</h3>
-        <form onSubmit={this.onSubmit}>
-          <div className="form-group">
-            <label>Name: </label>
-            <input type="text"
-              className="form-control"
-              value={this.state.name}
-              onChange={this.onChangeCourseName}
-            />
-          </div>
-          <div className="form-group">
-            <label>Code: </label>
-            <input type="text"
-              className="form-control"
-              value={this.state.code}
-              onChange={this.onChangeCourseCode}
-            />
-          </div>
-          <div className="form-group">
-            <label>Credit: </label>
-            <input type="number"
-              className="form-control"
-              value={this.state.credit}
-              onChange={this.onChangeCourseCredit}
-            />
-          </div>
-          <div className="form-group">
-            <button className="btn btn-primary" type="submit">Create Course</button>
-          </div>
-        </form>
+        <div className="form-group">
+          <label>Name: </label>
+          <input type="text"
+            className="form-control"
+            value={this.state.name}
+            onChange={this.onChangeCourseName}
+          />
+        </div>
+        <div className="form-group">
+          <label>Description: </label>
+          <input type="text"
+            className="form-control"
+            value={this.state.description}
+            onChange={this.onChangeCourseCode}
+          />
+        </div>
+        <div className="form-group">
+          <label>Instructor: </label>
+          <input type="text"
+            className="form-control"
+            value={this.state.instructor}
+            onChange={this.onChangeCourseCode}
+          />
+        </div>
+        <hr />
+        <h3>Registered Student List</h3>
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Roll No</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              this.state.studentList.map((res,i) => (
+                <tr>
+                  <td>{res.name}</td>
+                  {
+                    console.log("Refresh")
+                  }
+                  <td>{res.email}</td>
+                  <td>{res.rollno}</td>
+                  <td>
+                    <button className="btn btn-error" value={res._id} onClick={this.onRemoveStudent} type="submit">Remove</button>
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+        <hr />
+        <h3>All Student List</h3>
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Roll No</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              this.state.allStudentList && this.state.allStudentList.map((res,i) => (
+                <tr>
+                  <td>{res.name}</td>
+                  <td>{res.email}</td>
+                  <td>{res.rollno}</td>
+                  <td>
+                    <button className="btn btn-primary" value={res._id} onClick={this.onAddStudent} type="submit">Add</button>
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+        <div className="form-group">
+          <button className="btn btn-primary" type="submit">Update Course</button>
+        </div>
       </div>
     );
   }

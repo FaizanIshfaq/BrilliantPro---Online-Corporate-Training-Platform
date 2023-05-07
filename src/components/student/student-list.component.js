@@ -1,29 +1,35 @@
-import React, { Component } from "react";
+import React,{ Component } from "react";
 import axios from 'axios';
 import StudentTableRow from './StudentTableRow';
 
-export default class StudentList extends Component {
+export default class StudentList extends Component
+{
 
-  constructor(props) {
+  constructor(props)
+  {
     super(props)
     this.state = {
       students: []
     };
   }
 
-  componentDidMount() {
+  componentDidMount()
+  {
     axios.get('http://localhost:4000/students/')
-      .then(res => {
+      .then(res =>
+      {
         this.setState({
           students: res.data
         });
       })
-      .catch((error) => {
+      .catch((error) =>
+      {
         console.log(error);
       })
   }
 
-  render() {
+  render()
+  {
     return (
       <div>
         <table className="table table-striped">
@@ -36,7 +42,7 @@ export default class StudentList extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.students.map((res, i) => (
+            {this.state.students.map((res,i) => (
               <StudentTableRow obj={res} key={i} />
             ))}
           </tbody>

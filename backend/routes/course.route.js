@@ -4,11 +4,15 @@ const express = require('express');
 const router = express.Router();
 
 // CREATE Course
-router.route('/create-course').post((req, res, next) => {
-  Course.create(req.body, (error, data) => {
-    if (error) {
+router.route('/create-course').post((req,res,next) =>
+{
+  Course.create(req.body,(error,data) =>
+  {
+    if (error)
+    {
       return next(error);
-    } else {
+    } else
+    {
       console.log(data);
       res.json(data);
     }
@@ -16,38 +20,50 @@ router.route('/create-course').post((req, res, next) => {
 });
 
 // READ Courses
-router.route('/').get((req, res, next) => {
-  Course.find((error, data) => {
-    if (error) {
+router.route('/').get((req,res,next) =>
+{
+  Course.find((error,data) =>
+  {
+    if (error)
+    {
       return next(error);
-    } else {
+    } else
+    {
       res.json(data);
     }
   });
 });
 
 // Get Single Course
-router.route('/edit-course/:id').get((req, res, next) => {
-  Course.findById(req.params.id, (error, data) => {
-    if (error) {
+router.route('/edit-course/:id').get((req,res,next) =>
+{
+  Course.findById(req.params.id,(error,data) =>
+  {
+    if (error)
+    {
       return next(error);
-    } else {
+    } else
+    {
       res.json(data);
     }
   });
 });
 
 // Update Course
-router.route('/update-course/:id').put((req, res, next) => {
+router.route('/update-course/:id').put((req,res,next) =>
+{
   Course.findByIdAndUpdate(
     req.params.id,
     {
       $set: req.body,
     },
-    (error, data) => {
-      if (error) {
+    (error,data) =>
+    {
+      if (error)
+      {
         return next(error);
-      } else {
+      } else
+      {
         res.json(data);
         console.log('Course updated successfully !');
       }
@@ -56,11 +72,15 @@ router.route('/update-course/:id').put((req, res, next) => {
 });
 
 // Delete Course
-router.route('/delete-course/:id').delete((req, res, next) => {
-  Course.findByIdAndRemove(req.params.id, (error, data) => {
-    if (error) {
+router.route('/delete-course/:id').delete((req,res,next) =>
+{
+  Course.findByIdAndRemove(req.params.id,(error,data) =>
+  {
+    if (error)
+    {
       return next(error);
-    } else {
+    } else
+    {
       res.status(200).json({
         msg: data,
       });

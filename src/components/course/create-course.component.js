@@ -1,8 +1,10 @@
-import React, { Component } from "react";
+import React,{ Component } from "react";
 import axios from 'axios';
 
-export default class CreateCourse extends Component {
-  constructor(props) {
+export default class CreateCourse extends Component
+{
+  constructor(props)
+  {
     super(props);
 
     this.onChangeCourseName = this.onChangeCourseName.bind(this);
@@ -18,19 +20,23 @@ export default class CreateCourse extends Component {
     };
   }
 
-  onChangeCourseName(e) {
+  onChangeCourseName(e)
+  {
     this.setState({ name: e.target.value });
   }
 
-  onChangeCourseDescription(e) {
+  onChangeCourseDescription(e)
+  {
     this.setState({ description: e.target.value });
   }
 
-  onChangeInstructor(e) {
+  onChangeInstructor(e)
+  {
     this.setState({ instructor: e.target.value });
   }
 
-  onSubmit(e) {
+  onSubmit(e)
+  {
     e.preventDefault();
 
     const courseObject = {
@@ -39,13 +45,14 @@ export default class CreateCourse extends Component {
       instructor: this.state.instructor,
       students: this.state.students
     };
-    axios.post('http://localhost:4000/courses/create-course', courseObject)
+    axios.post('http://localhost:4000/courses/create-course',courseObject)
       .then(res => console.log(res.data));
 
-    this.setState({ name: '', description: '', instructor: '', students: [] });
+    this.setState({ name: '',description: '',instructor: '',students: [] });
   }
 
-  render() {
+  render()
+  {
     return (
       <div>
         <h3>Create New Course</h3>

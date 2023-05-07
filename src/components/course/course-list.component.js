@@ -1,4 +1,6 @@
 import React,{ Component } from "react";
+// import link
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 export default class CourseList extends Component
@@ -49,15 +51,18 @@ export default class CourseList extends Component
                 <td>{course.description}</td>
                 <td>{course.duration}</td>
                 <td>
+                  {console.log("Course: ",i)}
                   {/* Add buttons to edit and delete the course */}
-                  <button className="btn btn-primary">Edit</button>
+                  <Link to={`/admin/courses/edit-course/${course._id}`}>
+                    <button className="btn btn-primary">Edit</button>
+                  </Link>
                   <button className="btn btn-danger">Delete</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-      </div>
+      </div >
     );
   }
 }

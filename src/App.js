@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes,Route } from 'react-router-dom';
 import LoginPage from './components/LoginPage';
 import RegistrationPage from './components/RegistrationPage';
 import CourseManagement from './components/CourseManagement';
@@ -26,7 +26,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 import './App.css';
 
-function App() {
+function App()
+{
   return (
     <div className="App">
       <header>
@@ -44,21 +45,21 @@ function App() {
           <Route path="/admin/assessments" element={<ManageAssessments />} />
           <Route path="/admin/materials" element={<ManageMaterials />} />
           <Route path="/admin/learners" element={<ManageLearners />} />
-          <Route path='/admin/learners/create-student' element={<CreateStudent/>} />
-          <Route path='/admin/learners/edit-student/:id' element={<EditStudent/>} />
-          <Route path='/admin/learners/student-list' element={<StudentList/>} />
-          <Route path='/admin/courses/create-course' element={<CreateCourse/>} />
-          <Route path='/admin/courses/edit-course/:id' element={<EditCourse/>} />
-          <Route path='/admin/courses/course-list' element={<CourseList/>} />
-          
+          <Route path='/admin/learners/create-student' element={<CreateStudent />} />
+          <Route path='/admin/learners/edit-student/:id' element={<EditStudent />} />
+          <Route path='/admin/learners/student-list' element={<StudentList />} />
+          <Route path='/admin/courses/create-course' element={<CreateCourse />} />
+          <Route path='/admin/courses/edit-course/:id' element={<EditCourse />} />
+          <Route path='/admin/courses/course-list' element={<CourseList />} />
 
-          
+
+
 
         </Routes>
       </main>
-      <footer>
+      {/* <footer>
         <p>&copy; 2021 Corporate LMS</p>
-      </footer>
+      </footer> */}
     </div>
   );
 }
