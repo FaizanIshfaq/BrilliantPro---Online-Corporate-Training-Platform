@@ -3,6 +3,8 @@ const Course = require('../Models/Course');
 const express = require('express');
 const router = express.Router();
 
+// let courseSchema = require('../models/Course');
+
 // CREATE Course
 router.route('/create-course').post((req,res,next) =>
 {
