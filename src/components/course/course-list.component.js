@@ -1,28 +1,35 @@
-import React, { Component } from "react";
+import React,{ Component } from "react";
 import axios from 'axios';
 
-export default class CourseList extends Component {
+export default class CourseList extends Component
+{
 
-  constructor(props) {
+  constructor(props)
+  {
     super(props)
     this.state = {
       courses: []
     };
   }
 
-  componentDidMount() {
+  componentDidMount()
+  {
     axios.get('http://localhost:4000/courses/')
-      .then(res => {
+      .then(res =>
+      {
+        console.log("Response: ",res.data);
         this.setState({
           courses: res.data
         });
       })
-      .catch((error) => {
+      .catch((error) =>
+      {
         console.log(error);
       })
   }
 
-  render() {
+  render()
+  {
     return (
       <div>
         <table className="table table-striped">
@@ -36,9 +43,9 @@ export default class CourseList extends Component {
           </thead>
           <tbody>
             {/* Map over the courses and render a table row for each course */}
-            {this.state.courses.map((course, i) => (
+            {this.state.courses.map((course,i) => (
               <tr key={i}>
-                <td>{course.courseName}</td>
+                <td>{course.name}</td>
                 <td>{course.description}</td>
                 <td>{course.duration}</td>
                 <td>
