@@ -6,51 +6,90 @@ let mongoose = require('mongoose'),
 let studentSchema = require('../models/Student')
 
 // CREATE Student
-router.route('/create-student').post((req, res, next) => {
-  studentSchema.create(req.body, (error, data) => {
-    if (error) {
+router.route('/create-student').post((req,res,next) =>
+{
+  studentSchema.create(req.body,(error,data) =>
+  {
+    if (error)
+    {
       return next(error)
-    } else {
+    } else
+    {
       console.log(data)
       res.json(data)
     }
   })
 })
 
+// get Student by id
+router.route('/get-students/').get(async (req,res) =>
+{
+  const studentIds = req.body;
+  console.log("studentIds: ",studentIds)
+  try
+  {
+    // // find student for every id in the array
+    // const students = await studentSchema.find({
+    //   '_id': { $in: studentIds }
+    // });
+    // console.log("students: ",students)
+    res.status(200).json("Hello");
+  }
+  catch (error)
+  {
+    console.log("Error",error);
+    res.status(500).send("Server Error Occured")
+  }
+});
+
+
 // READ Students
-router.route('/').get((req, res) => {
-  studentSchema.find((error, data) => {
-    if (error) {
+
+router.route('/').get((req,res) =>
+{
+  studentSchema.find((error,data) =>
+  {
+    if (error)
+    {
       return next(error)
-    } else {
+    } else
+    {
       res.json(data)
     }
   })
 })
 
 // Get Single Student
-router.route('/edit-student/:id').get((req, res) => {
-  studentSchema.findById(req.params.id, (error, data) => {
-    if (error) {
+router.route('/edit-student/:id').get((req,res) =>
+{
+  studentSchema.findById(req.params.id,(error,data) =>
+  {
+    if (error)
+    {
       return next(error)
-    } else {
+    } else
+    {
       res.json(data)
     }
   })
 })
 
 // Update Student
-router.route('/update-student/:id').put((req, res, next) => {
+router.route('/update-student/:id').put((req,res,next) =>
+{
   studentSchema.findByIdAndUpdate(
     req.params.id,
     {
       $set: req.body,
     },
-    (error, data) => {
-      if (error) {
+    (error,data) =>
+    {
+      if (error)
+      {
         return next(error)
         console.log(error)
-      } else {
+      } else
+      {
         res.json(data)
         console.log('Student updated successfully !')
       }
@@ -59,11 +98,15 @@ router.route('/update-student/:id').put((req, res, next) => {
 })
 
 // Delete Student
-router.route('/delete-student/:id').delete((req, res, next) => {
-  studentSchema.findByIdAndRemove(req.params.id, (error, data) => {
-    if (error) {
+router.route('/delete-student/:id').delete((req,res,next) =>
+{
+  studentSchema.findByIdAndRemove(req.params.id,(error,data) =>
+  {
+    if (error)
+    {
       return next(error)
-    } else {
+    } else
+    {
       res.status(200).json({
         msg: data,
       })
