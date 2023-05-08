@@ -31,10 +31,10 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(cors());
-app.use('/students', studentRoute)
-app.use('/courses', courseRoute)
-app.use('/materials', materialRoute)
-app.use('/assessments', assessmentRoute)
+app.use('/students',studentRoute)
+app.use('/courses',courseRoute)
+app.use('/materials',materialRoute)
+app.use('/assessments',assessmentRoute)
 
 // PORT
 const port = process.env.PORT || 4000;
@@ -43,11 +43,6 @@ const server = app.listen(port,() =>
   console.log('Connected to port ' + port)
 })
 
-// 404 Error
-app.use((req,res,next) =>
-{
-  next(createError(404));
-});
 
 app.use(function (err,req,res,next)
 {

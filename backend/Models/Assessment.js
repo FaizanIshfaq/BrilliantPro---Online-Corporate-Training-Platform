@@ -1,36 +1,30 @@
 const mongoose = require('mongoose');
 
-const questionSchema = new mongoose.Schema({
-  statement: {
-    type: String,
-    required: true,
-  },
-  options: [{
-    type: String,
-    required: true,
-  }],
-  correctOption: {
-    type: String,
-    required: true,
-  },
-});
-
 const assessmentSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
   },
   durationInMinutes: {
     type: Number,
-    required: true,
   },
   passingPercentage: {
     type: Number,
-    required: true,
   },
-  questions: [questionSchema],
+  questions: [
+    {
+      statement: {
+        type: String,
+      },
+      options: [{
+        type: String,
+      }],
+      correctOption: {
+        type: String,
+      }
+    }
+  ],
 });
 
-const Assessment = mongoose.model('Assessment', assessmentSchema);
+const Assessment = mongoose.model('Assessment',assessmentSchema);
 
 module.exports = Assessment;

@@ -1,8 +1,10 @@
-import React, { Component } from "react";
+import React,{ Component } from "react";
 import axios from 'axios';
 
-export default class CreateAssessment extends Component {
-  constructor(props) {
+export default class CreateAssessment extends Component
+{
+  constructor(props)
+  {
     super(props);
 
     this.onChangeName = this.onChangeName.bind(this);
@@ -18,30 +20,35 @@ export default class CreateAssessment extends Component {
       name: '',
       durationInMinutes: 0,
       passingPercentage: 0,
-      questions: [{ statement: '', options: ['', '', '', ''], correctOption: '' }]
+      questions: []
     };
   }
 
-  onChangeName(e) {
+  onChangeName(e)
+  {
     this.setState({ name: e.target.value });
   }
 
-  onChangeDuration(e) {
+  onChangeDuration(e)
+  {
     this.setState({ durationInMinutes: e.target.value });
   }
 
-  onChangePassingPercentage(e) {
+  onChangePassingPercentage(e)
+  {
     this.setState({ passingPercentage: e.target.value });
   }
 
-  onChangeQuestionStatement(e) {
+  onChangeQuestionStatement(e)
+  {
     const index = e.target.getAttribute('data-index');
     const newQuestions = [...this.state.questions];
     newQuestions[index].statement = e.target.value;
     this.setState({ questions: newQuestions });
   }
 
-  onChangeQuestionOption(e) {
+  onChangeQuestionOption(e)
+  {
     const index = e.target.getAttribute('data-index');
     const optionIndex = e.target.getAttribute('data-option-index');
     const newQuestions = [...this.state.questions];
@@ -49,20 +56,23 @@ export default class CreateAssessment extends Component {
     this.setState({ questions: newQuestions });
   }
 
-  onChangeQuestionCorrectOption(e) {
+  onChangeQuestionCorrectOption(e)
+  {
     const index = e.target.getAttribute('data-index');
     const newQuestions = [...this.state.questions];
     newQuestions[index].correctOption = e.target.value;
     this.setState({ questions: newQuestions });
   }
 
-  addQuestion() {
+  addQuestion()
+  {
     this.setState(prevState => ({
-      questions: [...prevState.questions, { statement: '', options: ['', '', '', ''], correctOption: '' }]
+      questions: [...prevState.questions,{ statement: '',options: ['','','',''],correctOption: '' }]
     }));
   }
 
-  onSubmit(e) {
+  onSubmit(e)
+  {
     e.preventDefault();
 
     const assessmentObject = {
@@ -71,18 +81,22 @@ export default class CreateAssessment extends Component {
       passingPercentage: this.state.passingPercentage,
       questions: this.state.questions
     };
-    axios.post('http://localhost:4000/assessments/create-assessment', assessmentObject)
-      .then(res => console.log(res.data));
+    console.log("Data To send: ",assessmentObject);
+
+    axios.post('http://localhost:4000/assessments/create-assessment',assessmentObject)
+      .then(res => console.log(res.data))
+      .catch((error) => { alert("Error Occured While Creation") });
 
     this.setState({
       name: '',
       durationInMinutes: 0,
       passingPercentage: 0,
-      questions: [{ statement: '', options: ['', '', '', ''], correctOption: '' }]
+      questions: []
     });
   }
 
-  render() {
+  render()
+  {
     return (
       <div>
         <h3>Create New Assessment</h3>
@@ -108,13 +122,14 @@ export default class CreateAssessment extends Component {
             <input type="number"
               className="form-control"
               value={this.state.passingPercentage}
-                onChange={this.onChangePassingPercentage}
+              onChange={this.onChangePassingPercentage}
             />
-            </div>
-            <div className="form-group">
-              <label>Questions: </label>
-              <button type="button" className="btn btn-primary" onClick={this.addQuestion}>Add Question</button>
-              {this.state.questions.map((question, i) => (
+          </div>
+          <div className="form-group">
+            <label>Questions </label>
+            <button type="button" className="btn btn-primary" onClick={this.addQuestion}>Add Question</button>
+            {
+              this.state.questions.map((question,i) => (
                 <div key={i}>
                   <div className="form-group">
                     <label>Question {i + 1}: </label>
@@ -127,7 +142,7 @@ export default class CreateAssessment extends Component {
                   </div>
                   <div className="form-group">
                     <label>Options: </label>
-                    {question.options.map((option, j) => (
+                    {question.options.map((option,j) => (
                       <div key={j}>
                         <input type="text"
                           className="form-control"
@@ -149,15 +164,16 @@ export default class CreateAssessment extends Component {
                     />
                   </div>
                 </div>
-              ))}
-            </div>
-            <div className="form-group">
-              <input type="submit" value="Create Assessment" className="btn btn-primary" />
-            </div>
-            </form>
-            </div>
+              ))
+            }
+          </div>
+          <div className="form-group">
+            <input type="submit" value="Create Assessment" className="btn btn-primary" />
+          </div>
+        </form>
+      </div>
     );
 
-    }
+  }
 }
 

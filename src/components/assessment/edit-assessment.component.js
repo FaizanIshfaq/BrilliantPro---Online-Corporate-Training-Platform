@@ -1,125 +1,209 @@
-import React, { Component } from "react";
+import React,{ Component } from "react";
 import axios from 'axios';
 
-export default class EditAssessment extends Component {
-  constructor(props) {
+export default class EditAssessment extends Component
+{
+  constructor(props)
+  {
     super(props);
 
     // Set up functions
     this.onChangeName = this.onChangeName.bind(this);
-    this.onChangeDescription = this.onChangeDescription.bind(this);
-    this.onChangeMaxScore = this.onChangeMaxScore.bind(this);
+    this.onChangedurationInMinutes = this.onChangedurationInMinutes.bind(this);
+    this.onChangepassingPercentage = this.onChangepassingPercentage.bind(this);
+    this.onChangeQuestionStatement = this.onChangeQuestionStatement.bind(this);
+    this.onChangeQuestionOption = this.onChangeQuestionOption.bind(this);
+    this.onChangeQuestionCorrectOption = this.onChangeQuestionCorrectOption.bind(this);
+    this.addQuestion = this.addQuestion.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
     // Get id from URL
     const segments = window.location.href.split('/');
     const assessmentId = segments[segments.length - 1];
-
+    console.log("AseessmentId : ",assessmentId)
     // Set up state
     this.state = {
       name: "",
-      description: "",
-      maxScore: "",
-      assessmentId: assessmentId,
+      durationInMinutes: "0",
+      passingPercentage: "0",
+      _id: assessmentId,
+      questions: [],
     };
   }
 
-  componentDidMount() {
+  componentDidMount()
+  {
     this.getAssessment();
   }
 
-  getAssessment() {
+  getAssessment()
+  {
     axios
-      .get(`http://localhost:4000/assessments/${this.state.assessmentId}`)
-      .then((res) => {
-        const { name, description, maxScore } = res.data;
+      .get(`http://localhost:4000/assessments/${this.state._id}`)
+      .then((res) =>
+      {
+        console.log(res.data);
+        const { name,durationInMinutes,passingPercentage,questions } = res.data;
         this.setState({
           name: name,
-          description: description,
-          maxScore: maxScore,
+          durationInMinutes: durationInMinutes,
+          passingPercentage: passingPercentage,
+          questions: questions,
         });
       })
       .catch((error) => console.log(error));
   }
 
-  onChangeName(e) {
+  onChangeName(e)
+  {
     this.setState({
       name: e.target.value,
     });
   }
 
-  onChangeDescription(e) {
+  onChangedurationInMinutes(e)
+  {
     this.setState({
-      description: e.target.value,
+      durationInMinutes: e.target.value,
     });
   }
 
-  onChangeMaxScore(e) {
-    this.setState({
-      maxScore: e.target.value,
-    });
+  onChangeQuestionStatement(e)
+  {
+    const index = e.target.getAttribute('data-index');
+    const newQuestions = [...this.state.questions];
+    newQuestions[index].statement = e.target.value;
+    this.setState({ questions: newQuestions });
   }
 
-  onSubmit(e) {
+  onChangeQuestionOption(e)
+  {
+    const index = e.target.getAttribute('data-index');
+    const optionIndex = e.target.getAttribute('data-option-index');
+    const newQuestions = [...this.state.questions];
+    newQuestions[index].options[optionIndex] = e.target.value;
+    this.setState({ questions: newQuestions });
+  }
+
+  onChangeQuestionCorrectOption(e)
+  {
+    const index = e.target.getAttribute('data-index');
+    const newQuestions = [...this.state.questions];
+    newQuestions[index].correctOption = e.target.value;
+    this.setState({ questions: newQuestions });
+  }
+
+  onChangepassingPercentage(e)
+  {
+    this.setState({
+      passingPercentage: e.target.value,
+    });
+  }
+  addQuestion()
+  {
+    this.setState(prevState => ({
+      questions: [...prevState.questions,{ statement: '',options: ['','','',''],correctOption: '' }]
+    }));
+  }
+  onSubmit(e)
+  {
     e.preventDefault();
-
-    const { name, description, maxScore } = this.state;
-
+    // get our form data out of state
+    const { name,durationInMinutes,passingPercentage,questions } = this.state;
     const updatedAssessment = {
       name: name,
-      description: description,
-      maxScore: maxScore,
+      durationInMinutes: durationInMinutes,
+      passingPercentage: passingPercentage,
+      questions: questions,
     };
 
+    console.log("Our Data to send For update : ",updatedAssessment)
     axios
-      .put(`http://localhost:4000/assessments/${this.state.assessmentId}`, updatedAssessment)
+      .put(`http://localhost:4000/assessments/update-assessment/${this.state._id}`,updatedAssessment)
       .then((res) => console.log(res.data));
 
     this.setState({
       name: "",
-      description: "",
-      maxScore: "",
+      durationInMinutes: "",
+      passingPercentage: "",
+      questions: [],
     });
   }
 
-  render() {
+  render()
+  {
     return (
       <div>
-        <h3>Edit Assessment</h3>
+        <h3>Update Assessment : <b>{this.state.name}</b></h3>
         <form onSubmit={this.onSubmit}>
           <div className="form-group">
-            <label>Name: </label>
-            <input
-              type="text"
+            <label>Assessment Name: </label>
+            <input type="text"
               className="form-control"
               value={this.state.name}
               onChange={this.onChangeName}
             />
           </div>
           <div className="form-group">
-            <label>Description: </label>
-            <input
-              type="text"
+            <label>Duration (in minutes): </label>
+            <input type="number"
               className="form-control"
-              value={this.state.description}
-              onChange={this.onChangeDescription}
+              value={this.state.durationInMinutes}
+              onChange={this.onChangeDuration}
             />
           </div>
           <div className="form-group">
-            <label>Max Score: </label>
-            <input
-              type="number"
+            <label>Passing Percentage: </label>
+            <input type="number"
               className="form-control"
-              value={this.state.maxScore}
-              onChange={this.onChangeMaxScore}
+              value={this.state.passingPercentage}
+              onChange={this.onChangePassingPercentage}
             />
           </div>
           <div className="form-group">
-            <input
-              type="submit"
-              value="Update Assessment"
-              className="btn btn-primary"
-            />
+            <label>Questions </label>
+            <button type="button" className="btn btn-primary" onClick={this.addQuestion}>Add Question</button>
+            {
+              this.state.questions.map((question,i) => (
+                <div key={i}>
+                  <div className="form-group">
+                    <label>Question {i + 1}: </label>
+                    <input type="text"
+                      className="form-control"
+                      data-index={i}
+                      value={question.statement}
+                      onChange={this.onChangeQuestionStatement}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Options: </label>
+                    {question.options.map((option,j) => (
+                      <div key={j}>
+                        <input type="text"
+                          className="form-control"
+                          data-index={i}
+                          data-option-index={j}
+                          value={option}
+                          onChange={this.onChangeQuestionOption}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="form-group">
+                    <label>Correct Option: </label>
+                    <input type="text"
+                      className="form-control"
+                      data-index={i}
+                      value={question.correctOption}
+                      onChange={this.onChangeQuestionCorrectOption}
+                    />
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+          <div className="form-group">
+            <input type="submit" value="Update Assessment" className="btn btn-primary" />
           </div>
         </form>
       </div>

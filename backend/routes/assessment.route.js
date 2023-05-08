@@ -5,11 +5,15 @@ const express = require('express');
 const router = express.Router();
 
 // CREATE Assessment
-router.route('/create-assessment').post((req, res, next) => {
-  Assessment.create(req.body, (error, data) => {
-    if (error) {
+router.route('/create-assessment').post((req,res,next) =>
+{
+  Assessment.create(req.body,(error,data) =>
+  {
+    if (error)
+    {
       return next(error);
-    } else {
+    } else
+    {
       console.log(data);
       res.json(data);
     }
@@ -17,38 +21,50 @@ router.route('/create-assessment').post((req, res, next) => {
 });
 
 // READ Assessments
-router.route('/').get((req, res, next) => {
-  Assessment.find((error, data) => {
-    if (error) {
+router.route('/').get((req,res,next) =>
+{
+  Assessment.find((error,data) =>
+  {
+    if (error)
+    {
       return next(error);
-    } else {
+    } else
+    {
       res.json(data);
     }
   });
 });
 
 // Get Single Assessment
-router.route('/:id').get((req, res, next) => {
-  Assessment.findById(req.params.id, (error, data) => {
-    if (error) {
+router.route('/:id').get((req,res,next) =>
+{
+  Assessment.findById(req.params.id,(error,data) =>
+  {
+    if (error)
+    {
       return next(error);
-    } else {
+    } else
+    {
       res.json(data);
     }
   });
 });
 
 // Update Assessment
-router.route('/update-assessment/:id').put((req, res, next) => {
+router.route('/update-assessment/:id').put((req,res,next) =>
+{
   Assessment.findByIdAndUpdate(
     req.params.id,
     {
       $set: req.body,
     },
-    (error, data) => {
-      if (error) {
+    (error,data) =>
+    {
+      if (error)
+      {
         return next(error);
-      } else {
+      } else
+      {
         res.json(data);
         console.log('Assessment updated successfully !');
       }
@@ -57,11 +73,15 @@ router.route('/update-assessment/:id').put((req, res, next) => {
 });
 
 // Delete Assessment
-router.route('/delete-assessment/:id').delete((req, res, next) => {
-  Assessment.findByIdAndRemove(req.params.id, (error, data) => {
-    if (error) {
+router.route('/delete-assessment/:id').delete((req,res,next) =>
+{
+  Assessment.findByIdAndRemove(req.params.id,(error,data) =>
+  {
+    if (error)
+    {
       return next(error);
-    } else {
+    } else
+    {
       res.status(200).json({
         msg: data,
       });
