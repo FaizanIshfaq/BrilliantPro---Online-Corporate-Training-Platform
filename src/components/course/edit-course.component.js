@@ -10,8 +10,8 @@ export default class CreateCourse extends Component
 
     // Setting up functions
     this.onChangeCourseName = this.onChangeCourseName.bind(this);
-    this.onChangeCourseCode = this.onChangeCourseCode.bind(this);
-    this.onChangeCourseCredit = this.onChangeCourseCredit.bind(this);
+    this.onChangeDescription = this.onChangeDescription.bind(this);
+    this.onChangeInstructor = this.onChangeInstructor.bind(this);
     // bindAdd Student
     this.onAddStudent = this.onAddStudent.bind(this);
     this.onRemoveStudent = this.onRemoveStudent.bind(this);
@@ -30,6 +30,14 @@ export default class CreateCourse extends Component
       studentList: [],
       allStudentList: [],
     }
+  }
+  async loadCourseStudents(idsList)
+  {
+    idsList.map(async (id,i) =>
+    {
+      const res = await axios.get('http://localhost:4000/students/get-students/',{ idsList });
+      console.log("Student : ",i," : ",res);
+    });
   }
   loadAllStudente()
   {
@@ -55,8 +63,8 @@ export default class CreateCourse extends Component
           name: res.data.name,
           description: res.data.description,
           instructor: res.data.instructor,
-          studentList: res.data.students
         });
+        this.loadCourseStudents(res.data.students);
       })
       .catch((error) =>
       {
@@ -102,29 +110,35 @@ export default class CreateCourse extends Component
     this.setState({ name: e.target.value })
   }
 
-  onChangeCourseCode(e)
+  onChangeDescription(e)
   {
-    this.setState({ code: e.target.value })
+    this.setState({ description: e.target.value })
   }
 
-  onChangeCourseCredit(e)
+  onChangeInstructor(e)
   {
-    this.setState({ credit: e.target.value })
+    this.setState({ instructor: e.target.value })
   }
 
   onSubmit(e)
   {
     e.preventDefault()
 
+
     const courseObject = {
+      _id: this.state._id,
       name: this.state.name,
       description: this.state.description,
-      instructor: this.state.instructor
+      instructor: this.state.instructor,
+      students: this.state.studentList.map((res) => res._id)
     };
-    axios.post('http://localhost:4000/courses/create-course',courseObject)
-      .then(res => console.log(res.data));
 
-    this.setState({ name: '',code: '',credit: '' })
+    axios.put(`http://localhost:4000/courses/update-course/${this.state._id}`,courseObject)
+      .then(res => console.log(res.data))
+      .catch((error) =>
+      {
+        console.log(error);
+      })
   }
 
   render()
@@ -145,7 +159,7 @@ export default class CreateCourse extends Component
           <input type="text"
             className="form-control"
             value={this.state.description}
-            onChange={this.onChangeCourseCode}
+            onChange={this.onChangeDescription}
           />
         </div>
         <div className="form-group">
@@ -153,7 +167,7 @@ export default class CreateCourse extends Component
           <input type="text"
             className="form-control"
             value={this.state.instructor}
-            onChange={this.onChangeCourseCode}
+            onChange={this.onChangeInstructor}
           />
         </div>
         <hr />
@@ -212,7 +226,7 @@ export default class CreateCourse extends Component
           </tbody>
         </table>
         <div className="form-group">
-          <button className="btn btn-primary" type="submit">Update Course</button>
+          <button className="btn btn-primary" onClick={this.onSubmit} type="submit">Update Course</button>
         </div>
       </div>
     );
