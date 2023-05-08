@@ -8,6 +8,10 @@ const studentRoute = require('../backend/routes/student.route')
 
 const courseRoute = require('../backend/routes/course.route')
 
+const materialRoute = require('../backend/routes/material.route')
+
+const assessmentRoute = require('../backend/routes/assessment.route')
+
 
 // Connecting mongoDB Database
 mongoose
@@ -27,6 +31,8 @@ app.use(bodyParser.urlencoded({
 app.use(cors());
 app.use('/students', studentRoute)
 app.use('/courses', courseRoute)
+app.use('/materials', materialRoute)
+app.use('/assessments', assessmentRoute)
 
 
 // PORT

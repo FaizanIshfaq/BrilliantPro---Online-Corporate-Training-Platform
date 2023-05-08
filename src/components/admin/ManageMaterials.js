@@ -1,47 +1,35 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Routes, Route, Link } from 'react-router-dom';
+import CreateMaterial from '../material/create-material.component';
 
-const ManageMaterials = () => {
-  const [materials, setMaterials] = useState([]);
-
-  const handleAddMaterial = (event) => {
-    event.preventDefault();
-    // Add material logic
-  };
-
-  const handleDeleteMaterial = (materialId) => {
-    // Delete material logic
-  };
-
-  const handleEditMaterial = (materialId) => {
-    // Edit material logic
-  };
-
+function ManageMaterials() {
   return (
-    <div>
-      <h2>Manage Materials</h2>
-      <form onSubmit={handleAddMaterial}>
-        <label>
-          Material Name:
-          <input type="text" name="name" />
-        </label>
-        <label>
-          Material Description:
-          <input type="text" name="description" />
-        </label>
-        <button type="submit">Add Material</button>
-      </form>
-      <ul>
-        {materials.map((material) => (
-          <li key={material.id}>
-            <h3>{material.name}</h3>
-            <p>{material.description}</p>
-            <button onClick={() => handleEditMaterial(material.id)}>Edit</button>
-            <button onClick={() => handleDeleteMaterial(material.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
+    <div className="App">
+      <header className="App-header">
+        <nav className="nav">
+          <Link to={'/admin/materials/create-material'} className="nav-link">
+            Create Material
+          </Link>
+
+          <div className="nav">
+            {/* <Link to={'/admin/materials/edit-material'} className="nav-link">
+              Edit Material
+            </Link> */}
+
+            <Link to={'/admin/materials/material-list'} className="nav-link">
+              Material List
+            </Link>
+          </div>
+        </nav>
+      </header>
+
+      <Routes>
+        <Route path="/admin/materials/create-material" element={<CreateMaterial />} />
+        {/* <Route path="/admin/materials/edit-material" element={<EditMaterial />} /> */}
+        {/* <Route path="/admin/materials/material-list" element={<MaterialList />} /> */}
+      </Routes>
     </div>
   );
-};
+}
 
 export default ManageMaterials;

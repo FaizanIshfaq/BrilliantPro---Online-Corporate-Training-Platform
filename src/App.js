@@ -19,6 +19,14 @@ import CreateCourse from './components/course/create-course.component';
 import EditCourse from './components/course/edit-course.component';
 import CourseList from './components/course/course-list.component';
 
+import CreateMaterial from './components/material/create-material.component';
+import EditMaterial from './components/material/edit-material.component';
+import MaterialList from './components/material/material-list.component';
+
+import CreateAssessment from './components/assessment/create-assessment.component';
+import EditAssessment from './components/assessment/edit-assessment.component';
+import AssessmentList from './components/assessment/assessment-list.component';
+
 
 
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -41,7 +49,7 @@ function App()
           <Route path="/users" element={<UserManagement />} />
           <Route path="/learner" element={<LearnerDashboard />} />
           <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/admin/courses" element={<ManageCourses />} /> // Add this route
+          <Route path="/admin/courses" element={<ManageCourses />} />
           <Route path="/admin/assessments" element={<ManageAssessments />} />
           <Route path="/admin/materials" element={<ManageMaterials />} />
           <Route path="/admin/learners" element={<ManageLearners />} />
@@ -51,6 +59,14 @@ function App()
           <Route path='/admin/courses/create-course' element={<CreateCourse />} />
           <Route path='/admin/courses/edit-course/:id' element={<EditCourse />} />
           <Route path='/admin/courses/course-list' element={<CourseList />} />
+          <Route path='/admin/materials/create-material' element={<CreateMaterial />} />
+          <Route path='/admin/materials/edit-material/:id' element={<EditMaterial />} />
+          <Route path='/admin/materials/material-list' element={<MaterialList />} />
+          <Route path='/admin/assessments/create-assessment' element={<CreateAssessment />} />
+          <Route path='/admin/assessments/edit-assessment/:id' element={<EditAssessment />} />
+          <Route path='/admin/assessments/assessment-list' element={<AssessmentList />} />
+          
+          
 
 
 
