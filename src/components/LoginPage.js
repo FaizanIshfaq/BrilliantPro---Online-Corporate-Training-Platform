@@ -3,7 +3,11 @@ import { Link } from 'react-router-dom';
 import './LoginPage.css';
 // import '../App.css'
 
-function LoginPage() {
+function LoginPage()
+{
+
+
+
   return (
     <div>
       <h2>Main Login Page</h2>
@@ -12,11 +16,11 @@ function LoginPage() {
           <button type="submit">Admin</button>
         </Link>
         <Link to="/admin/register">
-          <button type="submit">Admin Register</button>
+          <button type="submit" >Admin Register</button>
         </Link>
-        
+
       </form>
-    </div>
+    </div >
   );
 }
 

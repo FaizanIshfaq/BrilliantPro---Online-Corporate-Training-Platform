@@ -1,37 +1,49 @@
-import React, { useState } from 'react';
+import React,{ useState } from 'react';
 import axios from 'axios';
 
-const AdminRegister = () => {
-  const [formData, setFormData] = useState({
+const AdminRegister = () =>
+{
+  const [formData,setFormData] = useState({
     email: '',
     password: '',
     confirmPassword: ''
   });
 
-  const { email, password, confirmPassword } = formData;
+  const { email,password,confirmPassword } = formData;
 
-  const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const onChange = e => setFormData({ ...formData,[e.target.name]: e.target.value });
 
-  const onSubmit = async e => {
+  const onSubmit = async e =>
+  {
     e.preventDefault();
 
-    if (password !== confirmPassword) {
+    if (password !== confirmPassword)
+    {
       console.log('Passwords do not match');
       return;
     }
 
-    try {
+    try
+    {
       const config = {
         headers: {
           'Content-Type': 'application/json'
         }
       };
 
-      const body = JSON.stringify({ email, password });
-
-      const res = await axios.post('/admin/register', body, config);
+      const dataToSend = {
+        email: formData.email,
+        password: formData.password
+      }
+      console.log("dataToSend: ",dataToSend);
+      const res = await axios.post('http://localhost:4000/admins/register',dataToSend,config);
       console.log(res.data);
-    } catch (err) {
+    } catch (err)
+    {
+      if (err.response.status === 400)
+      {
+        alert("Email Already Exsists")
+      }
       console.log(err.response.data);
     }
   };
