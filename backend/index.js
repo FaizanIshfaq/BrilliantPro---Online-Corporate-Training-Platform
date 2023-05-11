@@ -12,6 +12,7 @@ const materialRoute = require('../backend/routes/material.route')
 
 const assessmentRoute = require('../backend/routes/assessment.route')
 
+const adminRoute = require('../backend/routes/admin.route')
 
 // Connecting mongoDB Database
 mongoose
@@ -35,6 +36,7 @@ app.use('/students',studentRoute)
 app.use('/courses',courseRoute)
 app.use('/materials',materialRoute)
 app.use('/assessments',assessmentRoute)
+app.use('/admins',adminRoute)
 
 // PORT
 const port = process.env.PORT || 4000;
