@@ -28,6 +28,9 @@ import EditAssessment from './components/assessment/edit-assessment.component';
 import AssessmentList from './components/assessment/assessment-list.component';
 
 
+import AdminLogin from './components/admin/AdminLogin';
+import AdminRegistration from './components/admin/AdminRegister';
+
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -44,6 +47,8 @@ function App()
       <main>
         <Routes>
           <Route path="/" element={<LoginPage />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/register" element={<AdminRegistration />} />
           <Route path="/register" element={<RegistrationPage />} />
           <Route path="/courses" element={<CourseManagement />} />
           <Route path="/users" element={<UserManagement />} />
