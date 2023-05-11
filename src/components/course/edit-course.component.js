@@ -92,7 +92,7 @@ export default class CreateCourse extends Component
   }
   onRemoveStudent(event)
   {
-    console.log("event Value",event.target.value);
+    console.log("event Value : ",event.target.value);
 
     // Find the student to remove from studentList
     const studentToRemove = this.state.studentList.filter((res) => res._id === event.target.value)[0];

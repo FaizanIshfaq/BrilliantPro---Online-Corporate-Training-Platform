@@ -10,14 +10,15 @@ const materialSchema = new Schema({
     type: String,
     // required: true
   },
-  course: {
-    type: Schema.Types.ObjectId,
-    ref: 'Course',
-    // required: true
-  }
-}, {
+  course: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Course',
+    }
+  ]
+},{
   timestamps: true,
   collection: 'materials'
 });
 
-module.exports = mongoose.model('Material', materialSchema);
+module.exports = mongoose.model('Material',materialSchema);

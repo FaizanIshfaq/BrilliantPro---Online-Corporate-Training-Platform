@@ -1,8 +1,10 @@
-import React, { Component } from "react";
+import React,{ Component } from "react";
 import axios from "axios";
 
-export default class EditMaterial extends Component {
-  constructor(props) {
+export default class EditMaterial extends Component
+{
+  constructor(props)
+  {
     super(props);
 
     // Setting up functions
@@ -11,157 +13,249 @@ export default class EditMaterial extends Component {
       this
     );
     this.onChangeMaterialFile = this.onChangeMaterialFile.bind(this);
-    this.onChangeSelectedCourses = this.onChangeSelectedCourses.bind(this);
+    this.onChangecourses = this.onChangecourses.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-
+    this.onAddCourse = this.onAddCourse.bind(this);
+    this.onRemoveCourse = this.onRemoveCourse.bind(this);
     // Get id from URL
     const segments = window.location.href.split("/");
     const materialId = segments[segments.length - 1];
-
+    this.allCourses = [];
     // Setting up state
     this.state = {
-      name: "",
-      description: "",
-      file: "",
-      selectedCourses: [],
       _id: materialId,
+      name: "No Data Loaded",
+      description: "No Material Description Loaded",
       courses: [],
+      allCourses: [],
     };
   }
-
-  componentDidMount() {
+  loadCourseData()
+  {
     axios
-      .get("http://localhost:4000/materials/edit-material/" + this.state._id)
-      .then((res) => {
-        console.log("res", res);
+      .get("http://localhost:4000/courses/")
+      .then((res) =>
+      {
+        if (res.data.length > 0)
+        {
+          this.allCourses = res.data;
+        }
+      })
+      .catch((error) =>
+      {
 
+        console.log(error);
+      });
+  }
+  loadMaterialData()
+  {
+    axios
+      .get("http://localhost:4000/materials/" + this.state._id)
+      .then((res) =>
+      {
+        console.log("All Courses ",this.allCourses);
+        const selectedCourses = [];
+        const otherCourses = [];
+        this.allCourses.forEach((course) =>
+        {
+          if (res.data.course.includes(course._id))
+          {
+            selectedCourses.push(course);
+          }
+          else
+          {
+            otherCourses.push(course);
+          }
+        });
+
+        console.log("Selected Courses : ",selectedCourses);
+        console.log("Other Courses : ",otherCourses);
         this.setState({
           name: res.data.name,
           description: res.data.description,
-          selectedCourses: res.data.courses,
+          courses: selectedCourses,
+          allCourses: otherCourses,
         });
+
       })
-      .catch((error) => {
+      .catch((error) =>
+      {
         console.log(error);
       });
 
-    axios
-      .get("http://localhost:4000/courses/")
-      .then((res) => {
-        if (res.data.length > 0) {
-          this.setState({
-            courses: res.data.map((course) => course),
-          });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+
+  }
+  componentDidMount()
+  {
+    this.loadCourseData();
+    this.loadMaterialData();
   }
 
-  onChangeMaterialName(e) {
+  onChangeMaterialName(e)
+  {
     this.setState({ name: e.target.value });
   }
 
-  onChangeMaterialDescription(e) {
+  onChangeMaterialDescription(e)
+  {
     this.setState({ description: e.target.value });
   }
 
-  onChangeMaterialFile(e) {
+  onChangeMaterialFile(e)
+  {
     this.setState({ file: e.target.files[0] });
   }
 
-  onChangeSelectedCourses(e) {
+  onChangecourses(e)
+  {
     const options = e.target.options;
-    const selectedCourses = [];
-    for (let i = 0; i < options.length; i++) {
-      if (options[i].selected) {
-        selectedCourses.push(options[i].value);
+    const courses = [];
+    for (let i = 0; i < options.length; i++)
+    {
+      if (options[i].selected)
+      {
+        courses.push(options[i].value);
       }
     }
-    this.setState({ selectedCourses });
+    this.setState({ courses });
   }
+  onAddCourse(event)
+  {
+    const course = this.state.allCourses.filter((res) => res._id === event.target.value)[0];
+    // set State
+    this.setState({
+      courses: [...this.state.courses,course]
+    });
+    const allCourses = this.state.allCourses.filter((res) => res._id !== event.target.value);
+    this.setState({ allCourses: allCourses });
+  }
+  onRemoveCourse(event)
+  {
+    const course = this.state.courses.filter((res) => res._id === event.target.value)[0];
+    // set State
 
-  onSubmit(e) {
+    this.setState({
+      allCourses: [...this.state.allCourses,course]
+    });
+    const courses = this.state.courses.filter((res) => res._id !== event.target.value);
+    this.setState({ courses: courses });
+  }
+  onSubmit(e)
+  {
     e.preventDefault();
-
-    const formData = new FormData();
-    formData.append("name", this.state.name);
-    formData.append("description", this.state.description);
-    formData.append("file", this.state.file);
-    formData.append("courses", JSON.stringify(this.state.selectedCourses));
-
+    const coursesToSend = this.state.courses.map((res) => res._id);
+    const dataToSend = {
+      _id: this.state._id,
+      name: this.state.name,
+      description: this.state.description,
+      course: coursesToSend
+    };
+    console.log("Data to send : ",dataToSend);
     axios
-      .put(
-        "http://localhost:4000/materials/update-material/" + this.state._id,
-        formData,
+      .put("http://localhost:4000/materials/update-material/" + this.state._id,dataToSend,
         {
           headers: {
-            "content-type": "multipart/form-data",
+            "content-type": "application/json",
           },
         }
       )
       .then((res) => console.log(res.data));
 
-    this.setState({ name: "", description: "", file: "", selectedCourses: [] });
+    this.setState({ name: "",description: "",file: "",courses: [],allCourses: [] });
   }
 
-  render() {
+  render()
+  {
     return (
       <div>
         <h3>Edit Material</h3>
-        {/* <form onSubmit={this.onSubmit}> */}
-          <div className="form-group">
-            <label>Name: </label>
-            <input
-              type="text"
-              className="form-control"
-              value= {this.state.name}  
-              onChange={this.onChangeMaterialName}
-            />
-          </div>
-          <div className="form-group">
-            <label>Description: </label>
-            <textarea
-              type="text"
-              className="form-control"
-              value={this.state.description}
-              onChange={this.onChangeMaterialDescription}
-            />
-          </div>
-          <div className="form-group">
-            <label>File: </label>
-            <input
-              type="file"
-              className="form-control"
-              onChange={this.onChangeMaterialFile}
-            />
-          </div>
-          <div className="form-group">
-            <label>Courses: </label>
-            <select
-              multiple
-              className="form-control"
-              value={this.state.selectedCourses}
-              onChange={this.onChangeSelectedCourses}
-            >
-              {this.state.courses.map((course) => {
-                return (
-                  <option key={course._id} value={course._id}>
-                    {course.name}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-          <div className="form-group">
-            <input
-              type="submit"
-              value="Edit Material"
-              className="btn btn-primary"
-            />
-          </div>
-        {/* </form> */}
+        <div className="form-group">
+          <label>Name: </label>
+          <input
+            type="text"
+            className="form-control"
+            value={this.state.name}
+            onChange={this.onChangeMaterialName}
+          />
+        </div>
+        <div className="form-group">
+          <label>Description: </label>
+          <textarea
+            type="text"
+            className="form-control"
+            value={this.state.description}
+            onChange={this.onChangeMaterialDescription}
+          />
+        </div>
+        <div className="form-group">
+          {/* <label>File: </label>
+          <input
+            type="file"
+            className="form-control"
+            onChange={this.onChangeMaterialFile}
+          /> */}
+        </div>
+        <div className="form-group">
+          <label>Added Courses</label>
+          <table className="table table-striped">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Teacher</th>
+                <th>Description</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                this.state.courses.map((res,i) => (
+                  <tr>
+                    <td>{res.name}</td>
+                    <td>{res.instructor}</td>
+                    <td>{res.description}</td>
+                    <td>
+                      <button className="btn btn-error" value={res._id} onClick={this.onRemoveCourse} type="submit">Remove</button>
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+          <hr />
+        </div>
+        <div className="form-group">
+          <label>All Courses: </label>
+          <table className="table table-striped">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Teacher</th>
+                <th>Description</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                this.state.allCourses.map((res,i) => (
+                  <tr>
+                    <td>{res.name}</td>
+                    {
+                      console.log("Refresh")
+                    }
+                    <td>{res.instructor}</td>
+                    <td>{res.description}</td>
+                    <td>
+                      <button className="btn btn-primary" value={res._id} onClick={this.onAddCourse} type="submit">Add</button>
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+        <div className="form-group">
+          <button className="btn btn-primary" onClick={this.onSubmit}> Edit Material</button>
+        </div>
       </div>
     );
   }

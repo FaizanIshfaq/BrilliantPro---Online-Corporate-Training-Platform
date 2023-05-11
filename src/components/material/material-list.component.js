@@ -1,29 +1,35 @@
-import React, { Component } from "react";
+import React,{ Component } from "react";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-export default class MaterialList extends Component {
-  constructor(props) {
+export default class MaterialList extends Component
+{
+  constructor(props)
+  {
     super(props);
     this.state = {
       materials: []
     };
   }
 
-  componentDidMount() {
+  componentDidMount()
+  {
     axios.get('http://localhost:4000/materials/')
-      .then(res => {
-        console.log("Response: ", res.data);
+      .then(res =>
+      {
+        console.log("Response: ",res.data);
         this.setState({
           materials: res.data
         });
       })
-      .catch((error) => {
+      .catch((error) =>
+      {
         console.log(error);
       });
   }
 
-  render() {
+  render()
+  {
     return (
       <div>
         <table className="table table-striped">
@@ -31,16 +37,14 @@ export default class MaterialList extends Component {
             <tr>
               <th>Material Name</th>
               <th>Description</th>
-              <th>Course</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            {this.state.materials.map((material, i) => (
+            {this.state.materials.map((material,i) => (
               <tr key={i}>
                 <td>{material.name}</td>
                 <td>{material.description}</td>
-                <td>{material.course}</td>
                 <td>
                   <Link to={`/admin/materials/edit-material/${material._id}`}>
                     <button className="btn btn-primary">Edit</button>
