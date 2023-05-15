@@ -114,4 +114,35 @@ router.route('/delete-student/:id').delete((req,res,next) =>
   })
 })
 
+
+router.post('/login',async (req,res) =>
+{
+  console.log("req.body: ",req.body)
+  try
+  {
+    const { email,password } = req.body;
+    if (!email || !password)
+    {
+      return res.status(400).json({ msg: 'Please enter all fields' });
+    }
+    // find admin with email 
+    const studentSchema = await studentSchema.findOne({ email });
+    if (!studentSchema)
+    {
+      return res.status(400).json({ msg: 'Student does not exist' });
+    }
+    // check if the password is correct
+    if (password !== studentSchema.rollnumber)
+    {
+      return res.status(400).json({ msg: 'Invalid credentials' });
+    }
+    res.status(200).json({ msg: 'Successful' });
+
+  } catch (err)
+  {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+});
+
 module.exports = router

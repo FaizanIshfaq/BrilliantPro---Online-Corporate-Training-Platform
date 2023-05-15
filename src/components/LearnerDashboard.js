@@ -1,10 +1,13 @@
 import React from 'react';
+import Navbar from './LearnerNavbar';
+import './AdminDashboard.css';
 
 const LearnerDashboard = () => {
   return (
-    <div>
-      <h2>Learner Dashboard</h2>
-      <p>List of enrolled courses and progress</p>
+    <div className="learner-dashboard">
+      <h2>learner Dashboard</h2>
+      <p>Overview of course and learner management</p>
+      <Navbar/>
     </div>
   );
 };

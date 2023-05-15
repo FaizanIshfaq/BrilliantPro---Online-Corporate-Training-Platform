@@ -1,0 +1,27 @@
+.nav {
+    --bs-nav-link-color: #fff; /* Change the default link color */
+    --bs-nav-link-hover-color: #edeeef;
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+  }
+  
+  .nav-link {
+    color: #fff;
+    font-size: 18px;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  .nav-link:hover {
+    background-color: #003366;
+  }
+  
+  .navbar-brand {
+    font-size: 24px;
+    font-weight: bold;
+    margin-right: 30px;
+  }
+  

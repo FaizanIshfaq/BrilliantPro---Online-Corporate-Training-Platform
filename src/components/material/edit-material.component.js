@@ -187,6 +187,47 @@ export default class EditMaterial extends Component
             onChange={this.onChangeMaterialDescription}
           />
         </div>
+
+        <div className="file-input-container">
+          <div className="form-group">
+            <label htmlFor="pdfFile">PDF File: </label>
+            <input
+              type="file"
+              className="form-control-file"
+              id="pdfFile"
+              accept="application/pdf"
+              onChange={(e) => this.setState({ pdfFile: e.target.files[0] })}
+            />
+          </div>
+        </div>
+
+        <div className="file-input-container">
+          <div className="form-group">
+            <label htmlFor="pptxFile">PPTX File: </label>
+            <input
+              type="file"
+              className="form-control-file"
+              id="pptxFile"
+              accept=".pptx"
+              onChange={(e) => this.setState({ pptxFile: e.target.files[0] })}
+            />
+          </div>
+        </div>
+
+        <div className="file-input-container">
+          <div className="form-group">
+            <label htmlFor="mp4File">MP4 File: </label>
+            <input
+              type="file"
+              className="form-control-file"
+              id="mp4File"
+              accept="video/mp4"
+              onChange={(e) => this.setState({ mp4File: e.target.files[0] })}
+            />
+          </div>
+        </div>
+
+
         <div className="form-group">
           {/* <label>File: </label>
           <input

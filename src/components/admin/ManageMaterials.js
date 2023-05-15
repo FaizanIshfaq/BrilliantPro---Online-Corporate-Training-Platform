@@ -5,21 +5,20 @@ import CreateMaterial from '../material/create-material.component';
 function ManageMaterials() {
   return (
     <div className="App">
-      <header className="App-header">
-        <nav className="nav">
-          <Link to={'/admin/materials/create-material'} className="nav-link">
-            Create Material
-          </Link>
-
-          <div className="nav">
-            {/* <Link to={'/admin/materials/edit-material'} className="nav-link">
-              Edit Material
-            </Link> */}
-
-            <Link to={'/admin/materials/material-list'} className="nav-link">
-              Material List
-            </Link>
-          </div>
+      <header className="App-head bckgrd">
+        <nav className="navbar navbar-expand-sm bg-dark navbar-dark">
+          <ul className="navbar-nav">
+            <li className="nav-item">
+              <Link to={'/admin/materials/create-material'} className="nav-link">
+                Create Material
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to={'/admin/materials/material-list'} className="nav-link">
+                Material List
+              </Link>
+            </li>
+          </ul>
         </nav>
       </header>
 

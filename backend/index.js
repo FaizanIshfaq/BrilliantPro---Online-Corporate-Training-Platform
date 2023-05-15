@@ -3,6 +3,7 @@ let mongoose = require('mongoose');
 let cors = require('cors');
 let bodyParser = require('body-parser');
 
+// let db = require('./database/db');
 // Express Route
 const studentRoute = require('../backend/routes/student.route')
 

@@ -30,7 +30,11 @@ import AssessmentList from './components/assessment/assessment-list.component';
 
 import AdminLogin from './components/admin/AdminLogin';
 import AdminRegistration from './components/admin/AdminRegister';
-
+import LearnerManageCourses from './components/learner/ManageCourse';
+import LearnerManageAssessments from './components/learner/ManageAssessment';
+import LearnerManageMaterials from './components/learner/ManageMaterial';
+import LearnerManageList from './components/learner/course/List-LearnerCourses.js';
+import LearnerLogin from './components/student/LearnerLogin';
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -53,6 +57,11 @@ function App()
           <Route path="/courses" element={<CourseManagement />} />
           <Route path="/users" element={<UserManagement />} />
           <Route path="/learner" element={<LearnerDashboard />} />
+          <Route path="/learner/courses" element={<LearnerManageCourses />} />
+          <Route path="/learner/assessments" element={<LearnerManageAssessments />} />
+          <Route path="/learner/materials" element={<LearnerManageMaterials />} />
+          <Route path="/learner/courses/course-list" element={<LearnerManageList />} />
+          <Route path="/learner/login" element={<LearnerLogin />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/courses" element={<ManageCourses />} />
           <Route path="/admin/assessments" element={<ManageAssessments />} />
@@ -79,7 +88,7 @@ function App()
         </Routes>
       </main>
       {/* <footer>
-        <p>&copy; 2021 Corporate LMS</p>
+        <p>&copy; 2023 Corporate LMS</p>
       </footer> */}
     </div>
   );

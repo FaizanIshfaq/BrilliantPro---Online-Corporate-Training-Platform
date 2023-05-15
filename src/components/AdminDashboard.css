@@ -9,10 +9,11 @@
   font-size: 32px;
   margin-bottom: 20px;
   text-decoration: none;
+  color: white;
 }
 
 .admin-dashboard p {
   font-size: 24px;
-  color: #666;
+  color: white;
   text-decoration: none;
 }
